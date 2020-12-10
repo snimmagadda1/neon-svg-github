@@ -50,7 +50,7 @@ const SvgStyles = styled.div`
     stroke: #388bfd;
   }
 
-  #connector.active {
+  .connector.active {
     stroke: #f0883e;
   }
 
