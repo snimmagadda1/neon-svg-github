@@ -28,7 +28,7 @@ const SvgStyles = styled.div`
     position: relative;
   }
 
-  .toggle .circle:hover {
+  .toggle .circle:not(.active):hover {
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     transform: translate3d(0, -50%, 0);
     backface-visibility: hidden;
@@ -48,7 +48,6 @@ const SvgStyles = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s linear;
   }
 
   .toggle .circle.active {
