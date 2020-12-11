@@ -3,7 +3,64 @@ import styled from "styled-components";
 
 const SvgStyles = styled.div`
   background-color: ${(props) => (props.dark ? "060A0E" : "#fff")};
+  position: relative;
 
+  /* Toggle */
+  .toggle {
+    position: absolute;
+    left: 45%;
+    top: 40%;
+    width: 110px;
+    height: 60px;
+    border: 4px solid #d1d5d9;
+    color: transparent;
+    display: flex;
+    border-radius: 60px;
+  }
+
+  .toggle.active {
+    border: 4px solid #3b1e70;
+    background-color: #271052;
+  }
+
+  .frame {
+    margin: 4px 2px;
+    position: relative;
+  }
+
+  .toggle .circle:hover {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, -50%, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .toggle .circle {
+    cursor: pointer;
+    position: absolute;
+    height: 77px;
+    width: 77px;
+    background-color: #060a0e;
+    border-radius: 50%;
+    top: 50%;
+    left: -13px;
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s linear;
+  }
+
+  .toggle .circle.active {
+    background-color: #6e40c9;
+    transform: translate(80%, -50%);
+  }
+
+  .moon {
+    width: 50px;
+  }
+
+  /* SVGs */
   .grass.active {
     stroke: #da3633;
     stroke-dasharray: 1000;
@@ -126,12 +183,35 @@ const SvgStyles = styled.div`
       -moz-box-shadow: 0px 0px 78px 4px rgba(16, 134, 232, 0.73);
       box-shadow: 0px 0px 78px 4px rgba(16, 134, 232, 0.73);
     }
-   
+
     100% {
       opacity: 1;
       -webkit-box-shadow: 0px 0px 78px 4px rgba(16, 134, 232, 0.73);
       -moz-box-shadow: 0px 0px 78px 4px rgba(16, 134, 232, 0.73);
       box-shadow: 0px 0px 78px 4px rgba(16, 134, 232, 0.73);
+    }
+  }
+
+  @keyframes shake {
+    10%,
+    90% {
+      transform: translate3d(-1px, -50%, 0);
+    }
+
+    20%,
+    80% {
+      transform: translate3d(2px,-50%, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, -50%, 0);
+    }
+
+    40%,
+    60% {
+      transform: translate3d(4px, -50%, 0);
     }
   }
 `;
@@ -150,9 +230,25 @@ class DarkMode extends React.Component {
     activeClouds: false,
   };
 
+  // H4cky but quick
   toggle = () => {
+    if (this.state.isDark) {
+      this.setState({
+        isDark: false,
+        activeGrass: false,
+        activeBuilding: false,
+        activeBush: false,
+        activeConnector: false,
+        activeEye: false,
+        activeOcto: false,
+        activeStar: false,
+        activeCats: false,
+        activeClouds: false,
+      });
+      document.body.style.backgroundColor = "#fff";
+      return;
+    }
     document.body.style.backgroundColor = "#060A0E";
-    this.setState({ isDark: true });
     const {
       isDark,
       activeGrass,
@@ -165,6 +261,7 @@ class DarkMode extends React.Component {
       activeCats,
       activeClouds,
     } = this.state;
+    this.setState({ isDark: true });
     // grass first
     setTimeout(() => {
       this.setState({ activeGrass: !activeGrass });
@@ -196,11 +293,11 @@ class DarkMode extends React.Component {
 
     setTimeout(() => {
       this.setState({ activeOcto: !activeOcto });
-    }, 2000);
+    }, 1900);
 
     setTimeout(() => {
       this.setState({ activeStar: !activeStar });
-    }, 2100);
+    }, 2000);
   };
 
   // className={`grass ${activeGrass ? "active" : ""}`}
@@ -366,8 +463,27 @@ class DarkMode extends React.Component {
             </g>
           </g>
         </svg>
-
-        <p onClick={this.toggle}>Turn off the lights</p>
+        <span className={`toggle ${isDark ? "active" : ""}`}>
+          <div className="frame">
+            <div
+              className={`circle ${isDark ? "active" : ""}`}
+              onClick={this.toggle}
+            >
+              <svg
+                className="moon"
+                fill="#ffdf5d"
+                viewBox="0 0 20 18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m6.2835 10.576c4.5842 0 8.3004-3.7163 8.3004-8.3004 0-0.55176-0.0538-1.091-0.1565-1.6126-0.0726-0.36854 0.314-0.67873 0.6242-0.4669 2.4389 1.6656 4.0398 4.4679 4.0398 7.6442 0 5.1086-4.1413 9.25-9.25 9.25-4.5916 0-8.4019-3.3456-9.126-7.732-0.061135-0.37029 0.38242-0.59037 0.68577-0.36937 1.3701 0.99814 3.0574 1.5871 4.8823 1.5871z"
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+        </span>
       </SvgStyles>
     );
   }
